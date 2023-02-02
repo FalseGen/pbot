@@ -21,19 +21,26 @@ app.get('/', async (req, res) => {
     })
 });
 
+const MAX_CONTEXT_QUESTIONS = 10;
+let history = [];
+
 app.post('/', async (req, res) => {
     try{
         const { prompt } = req.body;
 
+        if (history.length >= MAX_CONTEXT_QUESTIONS) {
+            history.shift();
+        }
+        history.push(prompt);
+        
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `${prompt}`,
+            prompt: `${history.join("\n")}\n`,
             temperature: 1,
             max_tokens: 64,
             top_p: 1,
             frequency_penalty: 0.5,
             presence_penalty: 0.6,
-
         });
 
         res.status(200).send({
@@ -45,6 +52,8 @@ app.post('/', async (req, res) => {
         res.status(500).send({ error })
     }
 })
+
+
 
 
 app.listen(5000, () => console.log('Server is running on port http://localhost:5000'))

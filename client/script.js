@@ -1,6 +1,7 @@
 import bot from './assets/bot.svg';
 import user from './assets/user.svg';
 
+
 const form = document.querySelector('form');
 const chatContainer = document.querySelector('#chat_container');
 
@@ -80,13 +81,13 @@ const handleSubmit = async (e) =>{
 
   loader(messageDiv);
 
-  const response = await fetch('https://pbot-6age.onrender.com',{
+  const response = await fetch('http://localhost:5000',{
     method: 'POST',
     headers: {
       'Content-type': 'application/json' 
     },
     body: JSON.stringify({
-      prompt: data.get('prompt')
+      prompt: data.get('prompt'),
     })
   }) 
 
